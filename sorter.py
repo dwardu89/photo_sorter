@@ -26,13 +26,13 @@ def is_image_file(file):
 def get_image_files(folder, recursive):
     if folder == '.':
         folder = os.getcwd()
-    onlyfiles = [join(folder, f) for f in listdir(folder) if isfile(join(folder, f))]
+    file_paths = [join(folder, f) for f in listdir(folder) if isfile(join(folder, f))]
     if recursive:
-        onlyfolders = [join(folder, f) for f in listdir(folder) if isdir(join(folder, f))]
-        for folder_to_parse in onlyfolders:
-            files_to_append = get_image_files(folder_to_parse, recursive)
-            onlyfiles.extend(files_to_append)
-    return [f for f in onlyfiles if is_image_file(f)]
+        folder_paths = [join(folder, f) for f in listdir(folder) if isdir(join(folder, f))]
+        for folder_path in folder_paths:
+            files_to_append = get_image_files(folder_path, recursive)
+            file_paths.extend(files_to_append)
+    return [f for f in file_paths if is_image_file(f)]
 
 
 def move_file_to_folder(file_path, destination_folder):
@@ -51,9 +51,8 @@ def move_file_to_folder(file_path, destination_folder):
 
 
 def sort(folder, outputfolder, recursive):
-    thefiles = get_image_files(folder, recursive)
-    for file_path in thefiles:
-        # creation_date = time.strftime('%Y/%m/%d', time.gmtime(os.path.getmtime(file_path)))
+    file_paths = get_image_files(folder, recursive)
+    for file_path in file_paths:
         move_file_to_folder(file_path, outputfolder)
 
 
@@ -83,7 +82,12 @@ def main(argv):
             outputfolder = arg
         elif opt in ("-r", "--recursive"):
             recursive = True
-    sort(folder, outputfolder, recursive)
+    if folder is '' or outputfolder is '':
+        print 'Invalid use of sorter.py'
+        print 'Pass the following arguments'
+        print 'sorter.py -f <folder> -o <outputfolder> -r <recursive>'
+    else:
+        sort(folder, outputfolder, recursive)
 
 
 if __name__ == "__main__":
