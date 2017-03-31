@@ -1,17 +1,38 @@
 #!/usr/bin/python
 import getopt
 import imghdr
+import ntpath
 import os
+import shutil
 import sys
 import time
 from os import listdir
 from os.path import isfile, isdir, join
-import shutil
-import ntpath
+
+from PIL import Image
 
 __author__ = 'edwardvella'
 
-file_types = ['rgb', 'gif', 'pbm', 'pgm', 'ppm', 'tiff', 'rast', 'xbm', 'jpeg', 'bmp', 'png']
+file_types = ['jpeg']
+
+
+def exif_info2time(ts):
+    """
+    changes EXIF date ('2005:10:20 23:22:28') to number of seconds since 1970-01-01
+    Borrowed from http://code.activestate.com/recipes/550811-jpg-files-redater-by-exif-data/
+    """
+    tpl = time.strptime(ts + 'UTC', '%Y:%m:%d %H:%M:%S%Z')
+    return time.mktime(tpl)
+
+
+def get_date_from_exif(file_path):
+    im = Image.open(file_path)
+    if hasattr(im, '_getexif'):
+        exifdata = im._getexif()
+        dt_value = exifdata[0x9003]
+        exif_time = exif_info2time(dt_value)
+        return exif_time
+    return time.gmtime(os.path.getmtime(file_path))
 
 
 def path_leaf(path):
@@ -39,8 +60,9 @@ def move_file_to_folder(file_path, destination_folder):
     if destination_folder == '.':
         destination_folder = os.getcwd()
     creation_date = time.gmtime(os.path.getmtime(file_path))
-    final_path = join(destination_folder, time.strftime('%Y/%m/%d', time.gmtime(os.path.getmtime(file_path))))
-    print file_path
+
+    final_path = join(destination_folder, time.strftime('%Y/%m/%d', time.gmtime( get_date_from_exif(file_path))))
+    # print file_path
     print final_path
     print path_leaf(file_path)
     if not os.path.exists(final_path):
