@@ -28,11 +28,16 @@ def exif_info2time(ts):
 def get_date_from_exif(file_path):
     im = Image.open(file_path)
     if hasattr(im, '_getexif'):
-        exifdata = im._getexif()
-        dt_value = exifdata[0x9003]
-        exif_time = exif_info2time(dt_value)
-        return exif_time
-    return time.gmtime(os.path.getmtime(file_path))
+        try:
+            exifdata = im._getexif()
+            dt_value = exifdata[0x9003]
+            exif_time = exif_info2time(dt_value)
+            print exif_time
+            return exif_time
+        except (KeyError, TypeError) as e:
+            print os.path.getmtime(file_path)
+            return int(os.path.getmtime(file_path))
+    return int(os.path.getmtime(file_path)).time()
 
 
 def path_leaf(path):
