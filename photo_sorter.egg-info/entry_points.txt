@@ -1,0 +1,3 @@
+[console_scripts]
+photo_sorter = photo_sorter.__main__:main
+
