@@ -13,11 +13,11 @@ This uses the EXIF data found in the file and if the EXIF data is not available 
 ### Command to call
 Find and move all images in a folder
 
-- `python sorter.py -f <folder> -o <outputfolder>`
+- `photo_sorter -f <folder> -o <outputfolder>`
 
 Find and move all images in a folder and its sub folders
 
-- `python sorter.py -f <folder> -o <outputfolder> -r`
+- `photo_sorter -f <folder> -o <outputfolder> -r`
 
 File types supported:
 
