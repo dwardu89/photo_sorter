@@ -137,3 +137,6 @@ ENV/
 .idea/
 
 venv/
+
+__pycache__
+.vscode/

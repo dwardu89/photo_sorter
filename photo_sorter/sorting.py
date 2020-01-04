@@ -1,4 +1,4 @@
-#!/usr/bin/python
+import logging
 import getopt
 import imghdr
 import ntpath
@@ -14,7 +14,7 @@ from PIL import Image
 __author__ = 'edwardvella'
 
 file_types = ['jpeg']
-
+logger = logging.getLogger("sorter")
 
 def exif_info2time(ts):
     """
@@ -32,10 +32,10 @@ def get_date_from_exif(file_path):
             exifdata = im._getexif()
             dt_value = exifdata[0x9003]
             exif_time = exif_info2time(dt_value)
-            print exif_time
+            logger.debug(exif_time)
             return exif_time
-        except (KeyError, TypeError) as e:
-            print os.path.getmtime(file_path)
+        except (KeyError, TypeError):
+            logger.debug(os.path.getmtime(file_path))
             return int(os.path.getmtime(file_path))
     return int(os.path.getmtime(file_path)).time()
 
@@ -67,11 +67,10 @@ def move_file_to_folder(file_path, destination_folder):
     creation_date = time.gmtime(os.path.getmtime(file_path))
 
     final_path = join(destination_folder, time.strftime('%Y/%m/%d', time.gmtime( get_date_from_exif(file_path))))
-    # print file_path
-    print final_path
-    print path_leaf(file_path)
+
+    logger.debug(final_path)
+    logger.debug(path_leaf(file_path))
     if not os.path.exists(final_path):
-        print final_path
         os.makedirs(final_path)
     final_path = join(final_path, path_leaf(file_path))
     shutil.move(file_path, final_path)
@@ -81,41 +80,3 @@ def sort(folder, outputfolder, recursive):
     file_paths = get_image_files(folder, recursive)
     for file_path in file_paths:
         move_file_to_folder(file_path, outputfolder)
-
-
-def main(argv):
-    """
-    The main call for the sorter, in order to run this you need to follow the format.
-    This has to be called from the command line 'python sorter.py -f <folder> -o <outputfolder> -r <recursive>'
-    :param argv:
-    :return: None
-    """
-    folder = ''
-    outputfolder = ''
-    recursive = False
-
-    try:
-        opts, args = getopt.getopt(argv, "h:f:o:r", ["help", "folder=", "outputfolder=", "recursive"])
-    except getopt.GetoptError:
-        print 'sorter.py -f <folder> -o <outputfolder> -r <recursive>'
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt == '-h':
-            print 'sorter.py -f <folder> -o <outputfolder> -r <recursive>'
-            sys.exit()
-        elif opt in ("-f", "--folder"):
-            folder = arg
-        elif opt in ("-o", "--outputfolder"):
-            outputfolder = arg
-        elif opt in ("-r", "--recursive"):
-            recursive = True
-    if folder is '' or outputfolder is '':
-        print 'Invalid use of sorter.py'
-        print 'Pass the following arguments'
-        print 'sorter.py -f <folder> -o <outputfolder> -r <recursive>'
-    else:
-        sort(folder, outputfolder, recursive)
-
-
-if __name__ == "__main__":
-    main(sys.argv[1:])
