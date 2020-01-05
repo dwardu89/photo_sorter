@@ -1,1 +1,2 @@
+duplicate_finder
 photo_sorter

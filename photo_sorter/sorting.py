@@ -14,7 +14,8 @@ from PIL import Image
 __author__ = "edwardvella"
 
 file_types = ["jpeg", "png", "bmp"]
-logger = logging.getLogger("sorter")
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.StreamHandler())
 
 
 def exif_info2time(ts):

@@ -1,6 +1,9 @@
 README.md
 setup.cfg
 setup.py
+duplicate_finder/__init__.py
+duplicate_finder/__main__.py
+duplicate_finder/duplicates.py
 photo_org.egg-info/PKG-INFO
 photo_org.egg-info/SOURCES.txt
 photo_org.egg-info/dependency_links.txt
