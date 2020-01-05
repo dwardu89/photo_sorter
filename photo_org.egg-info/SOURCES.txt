@@ -1,0 +1,13 @@
+README.md
+setup.cfg
+setup.py
+photo_org.egg-info/PKG-INFO
+photo_org.egg-info/SOURCES.txt
+photo_org.egg-info/dependency_links.txt
+photo_org.egg-info/entry_points.txt
+photo_org.egg-info/not-zip-safe
+photo_org.egg-info/requires.txt
+photo_org.egg-info/top_level.txt
+photo_sorter/__init__.py
+photo_sorter/__main__.py
+photo_sorter/sorting.py
