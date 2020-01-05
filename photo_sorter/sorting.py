@@ -11,23 +11,24 @@ from os.path import isfile, isdir, join
 
 from PIL import Image
 
-__author__ = 'edwardvella'
+__author__ = "edwardvella"
 
-file_types = ['jpeg']
+file_types = ["jpeg", "png", "bmp"]
 logger = logging.getLogger("sorter")
+
 
 def exif_info2time(ts):
     """
     changes EXIF date ('2005:10:20 23:22:28') to number of seconds since 1970-01-01
     Borrowed from http://code.activestate.com/recipes/550811-jpg-files-redater-by-exif-data/
     """
-    tpl = time.strptime(ts + 'UTC', '%Y:%m:%d %H:%M:%S%Z')
+    tpl = time.strptime(ts + "UTC", "%Y:%m:%d %H:%M:%S%Z")
     return time.mktime(tpl)
 
 
 def get_date_from_exif(file_path):
     im = Image.open(file_path)
-    if hasattr(im, '_getexif'):
+    if hasattr(im, "_getexif"):
         try:
             exifdata = im._getexif()
             dt_value = exifdata[0x9003]
@@ -36,8 +37,7 @@ def get_date_from_exif(file_path):
             return exif_time
         except (KeyError, TypeError):
             logger.debug(os.path.getmtime(file_path))
-            return int(os.path.getmtime(file_path))
-    return int(os.path.getmtime(file_path)).time()
+    return int(os.path.getmtime(file_path).time())
 
 
 def path_leaf(path):
@@ -50,11 +50,13 @@ def is_image_file(file):
 
 
 def get_image_files(folder, recursive):
-    if folder == '.':
+    if folder == ".":
         folder = os.getcwd()
     file_paths = [join(folder, f) for f in listdir(folder) if isfile(join(folder, f))]
     if recursive:
-        folder_paths = [join(folder, f) for f in listdir(folder) if isdir(join(folder, f))]
+        folder_paths = [
+            join(folder, f) for f in listdir(folder) if isdir(join(folder, f))
+        ]
         for folder_path in folder_paths:
             files_to_append = get_image_files(folder_path, recursive)
             file_paths.extend(files_to_append)
@@ -62,11 +64,14 @@ def get_image_files(folder, recursive):
 
 
 def move_file_to_folder(file_path, destination_folder):
-    if destination_folder == '.':
+    if destination_folder == ".":
         destination_folder = os.getcwd()
     creation_date = time.gmtime(os.path.getmtime(file_path))
 
-    final_path = join(destination_folder, time.strftime('%Y/%m/%d', time.gmtime( get_date_from_exif(file_path))))
+    final_path = join(
+        destination_folder,
+        time.strftime("%Y/%m/%d", time.gmtime(get_date_from_exif(file_path))),
+    )
 
     logger.debug(final_path)
     logger.debug(path_leaf(file_path))
