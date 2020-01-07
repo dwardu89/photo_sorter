@@ -85,11 +85,9 @@ def print_duplicates(duplicates):
         logger.info("".join(word.ljust(col_width) for word in row))
 
 
-
 def find_duplicates(folder, recursive, file_types, verbose):
     if verbose:
         logger.setLevel(logging.DEBUG)
-    logger.debug("[VERBOSE]")
     file_paths = get_files(folder, recursive, file_types)
     duplicates = dict()
     for file_path in file_paths:

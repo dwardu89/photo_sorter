@@ -17,6 +17,8 @@ file_types = ["jpeg", "png", "bmp"]
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())
 
+folder_format = {"1": "%Y/%m/%d", "2": "%Y%m%d", "3": "%Y%m", "4": "%Y"}
+
 
 def exif_info2time(ts):
     """
@@ -64,14 +66,17 @@ def get_image_files(folder, recursive):
     return [f for f in file_paths if is_image_file(f)]
 
 
-def move_file_to_folder(file_path, destination_folder):
+def move_file_to_folder(file_path, destination_folder, destination_format):
     if destination_folder == ".":
         destination_folder = os.getcwd()
     creation_date = time.gmtime(os.path.getmtime(file_path))
 
     final_path = join(
         destination_folder,
-        time.strftime("%Y/%m/%d", time.gmtime(get_date_from_exif(file_path))),
+        time.strftime(
+            folder_format[destination_format],
+            time.gmtime(get_date_from_exif(file_path)),
+        ),
     )
 
     logger.debug(final_path)
@@ -82,7 +87,7 @@ def move_file_to_folder(file_path, destination_folder):
     shutil.move(file_path, final_path)
 
 
-def sort(folder, outputfolder, recursive):
+def sort(folder, outputfolder, recursive, destination_format):
     file_paths = get_image_files(folder, recursive)
     for file_path in file_paths:
-        move_file_to_folder(file_path, outputfolder)
+        move_file_to_folder(file_path, outputfolder, destination_format)
