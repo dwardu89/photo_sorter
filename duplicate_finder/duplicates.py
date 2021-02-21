@@ -1,11 +1,6 @@
 import logging
-import getopt
 import hashlib
-import ntpath
 import os
-import shutil
-import sys
-import time
 from os import listdir
 from os.path import isfile, isdir, join
 

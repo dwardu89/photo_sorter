@@ -1,3 +1,0 @@
-exifread
-Pillow
-colorama

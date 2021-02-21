@@ -1,4 +1,0 @@
-[console_scripts]
-find_duplicates = duplicate_finder.__main__:main
-photo_sorter = photo_sorter.__main__:main
-
