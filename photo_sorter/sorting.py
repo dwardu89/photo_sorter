@@ -1,13 +1,12 @@
-import logging
 import getopt
 import imghdr
+import logging
 import ntpath
 import os
 import shutil
-import sys
 import time
 from os import listdir
-from os.path import isfile, isdir, join
+from os.path import isdir, isfile, join
 
 from PIL import Image
 
