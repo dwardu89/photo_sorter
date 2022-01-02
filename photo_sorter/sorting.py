@@ -63,15 +63,16 @@ def get_image_files(folder, recursive):
     return [f for f in file_paths if is_image_file(f)]
 
 
-def move_file_to_folder(file_path, destination_folder):
+def move_file_to_folder(file_path, destination_folder, local_time):
     if destination_folder == ".":
         destination_folder = os.getcwd()
-    creation_date = time.gmtime(os.path.getmtime(file_path))
 
-    final_path = join(
-        destination_folder,
-        time.strftime("%Y/%m/%d", time.gmtime(get_date_from_exif(file_path))),
-    )
+    if local_time:
+        folder_name = time.strftime("%Y-%m-%d", time.localtime(get_date_from_exif(file_path)))
+    else:
+        folder_name = time.strftime("%Y-%m-%d", time.gmtime(get_date_from_exif(file_path)))
+
+    final_path = join(destination_folder, folder_name)
 
     logger.debug(final_path)
     logger.debug(path_leaf(file_path))
@@ -81,7 +82,7 @@ def move_file_to_folder(file_path, destination_folder):
     shutil.move(file_path, final_path)
 
 
-def sort(folder, outputfolder, recursive):
+def sort(folder, outputfolder, recursive, local_time):
     file_paths = get_image_files(folder, recursive)
     for file_path in file_paths:
-        move_file_to_folder(file_path, outputfolder)
+        move_file_to_folder(file_path, outputfolder, local_time)

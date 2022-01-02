@@ -14,12 +14,19 @@ def main():
         "-r",
         "--recursive",
         action="store_true",
-        help="Recurse thorugh the source folder",
+        help="Recurse through the source folder",
+    )
+
+    parser.add_argument(
+        "-l",
+        "--local",
+        action="store_true",
+        help="Convert to local time (instead of UTC time)",
     )
 
     args = parser.parse_args()
 
-    sort(args.source, args.destination, args.recursive)
+    sort(args.source, args.destination, args.recursive, args.local)
 
 
 if __name__ == "__main__":
