@@ -5,5 +5,5 @@
 #    pipenv lock --requirements
 #
 
--i https://pypi.org/simple
-pillow==8.4.0
+-i https://pypi.org/simple/
+pillow==9.0.0
