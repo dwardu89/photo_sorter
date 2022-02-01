@@ -6,4 +6,4 @@
 #
 
 -i https://pypi.org/simple
-pillow==7.1.0
+pillow==8.4.0

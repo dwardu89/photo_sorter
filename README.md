@@ -5,7 +5,7 @@ This became a problem when I wanted to start organising these photos which could
 cameras format the image names when it captures a photo. This could overwrite images if I were to copy the images to 
  one folder.
 
-An image sorting function that can be used to consolidate photos to a specific folder format <year/month/day_of_month>. 
+An image sorting function that can be used to consolidate photos to a specific folder format <year-month-day_of_month>.
 This also preserves the name of the image that the image was given.
 
 This uses the EXIF data found in the file and if the EXIF data is not available then it will revert to the created date.
@@ -13,11 +13,15 @@ This uses the EXIF data found in the file and if the EXIF data is not available 
 ### Command to call
 Find and move all images in a folder
 
-- `photo_sorter -f <folder> -o <outputfolder>`
+- `photo_sorter -s <folder> -d <outputfolder>`
 
 Find and move all images in a folder and its sub folders
 
-- `photo_sorter -f <folder> -o <outputfolder> -r`
+- `photo_sorter -s <folder> -d <outputfolder> -r`
+
+Find and move all images in a folder, convert to user's local time
+
+- `photo_sorter -s <folder> -d <outputfolder> -l`
 
 File types supported:
 
